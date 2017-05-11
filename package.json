@@ -1,0 +1,19 @@
+{
+  "name": "react-kanban",
+  "version": "1.0.0",
+  "description": "> A digital Kanban board made with React",
+  "main": "gulpfile.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/adavis001/React-Kanban.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/adavis001/React-Kanban/issues"
+  },
+  "homepage": "https://github.com/adavis001/React-Kanban#readme"
+}

@@ -1,0 +1,53 @@
+body {
+  background: tomato;
+  font-family: 'Open Sans', sans-serif;
+}
+
+.card{
+border-radius: 10px 10px 10px 10px;
+-moz-border-radius: 10px 10px 10px 10px;
+-webkit-border-radius: 10px 10px 10px 10px;
+border: 0px solid #000000;
+box-shadow: -1px 10px 18px -4px rgba(0,0,0,0.75);
+background-color: azure;
+width: 30vw;
+padding: 1vw;
+}
+
+.test{
+  display:flex;
+background-color: gray;
+}
+
+.Queue{
+border-radius: 10px 10px 10px 10px;
+-moz-border-radius: 10px 10px 10px 10px;
+-webkit-border-radius: 10px 10px 10px 10px;
+border: 0px solid #000000;
+box-shadow: -1px 10px 18px -4px rgba(0,0,0,0.75);
+background-color: orange;
+width: 30%;
+padding: 1vw;
+}
+
+.In_Progress{
+border-radius: 10px 10px 10px 10px;
+-moz-border-radius: 10px 10px 10px 10px;
+-webkit-border-radius: 10px 10px 10px 10px;
+border: 0px solid #000000;
+box-shadow: -1px 10px 18px -4px rgba(0,0,0,0.75);
+background-color: green;
+width: 30%;
+padding: 1vw;
+}
+
+.Done{
+border-radius: 10px 10px 10px 10px;
+-moz-border-radius: 10px 10px 10px 10px;
+-webkit-border-radius: 10px 10px 10px 10px;
+border: 0px solid #000000;
+box-shadow: -1px 10px 18px -4px rgba(0,0,0,0.75);
+background-color: pink;
+width: 30%;
+padding: 1vw;
+}
