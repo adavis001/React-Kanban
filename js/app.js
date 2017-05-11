@@ -37,19 +37,26 @@ const Card = (props) => (
     <div>Status of Task: { props.card.status }</div>
     <div>Created By:  { props.card.createdBy }</div>
     <div>Assigned To:  { props.card.assignedTo }</div>
+    <div>Task ID:  { props.card.id }</div>
+    <select >
+      <option  disabled selected>Select Task Status:</option>
+      <option value="To Do">To Do</option>
+      <option value="In Progress">In Progress</option>
+      <option value="Done">Done</option>
+    </select>
   </div>
 );
 
 
 //can't filter by id.  Figure out why later!
-// const CardSearchFilter = filter =>
-//   ({ title, priority, status, createdBy, assignedTo, id }) =>
-//     filter === "" ||
-//       title.toLowerCase().indexOf(filter.toLowerCase()) >= 0 ||
-//       priority.toLowerCase().indexOf(filter.toLowerCase()) >= 0 ||
-//       status.toLowerCase().indexOf(filter.toLowerCase()) >= 0 ||
-//       createdBy.toLowerCase().indexOf(filter.toLowerCase()) >= 0 ||
-//       assignedTo.toLowerCase().indexOf(filter.toLowerCase()) >= 0;
+const CardSearchFilter = filter =>
+  ({ title, priority, status, createdBy, assignedTo, id }) =>
+    filter === "" ||
+      title.toLowerCase().indexOf(filter.toLowerCase()) >= 0 ||
+      priority.toLowerCase().indexOf(filter.toLowerCase()) >= 0 ||
+      status.toLowerCase().indexOf(filter.toLowerCase()) >= 0 ||
+      createdBy.toLowerCase().indexOf(filter.toLowerCase()) >= 0 ||
+      assignedTo.toLowerCase().indexOf(filter.toLowerCase()) >= 0;
 
 const CardList = ({ cards, filter }) => (
   <ul>
@@ -60,15 +67,20 @@ const CardList = ({ cards, filter }) => (
   </ul>
 );
 
-const CardFilterInput = ({ setFilter }) => (
-  <input type="text" placeholder="search" onChange={setFilter} />
-);
+// const CardFilterInput = ({ setFilter }) => (
+//   <input type="text" placeholder="search" onChange={setFilter} />
+// );
 
 class Cards extends React.Component {
 
 }
 
 class DoneColumn extends React.Component {
+  constructor(props){
+    super(props);
+
+    };
+
   render(){
     return (
         <div>
@@ -82,6 +94,10 @@ class DoneColumn extends React.Component {
 }
 
 class ProgressColumn extends React.Component {
+  constructor(props){
+    super(props);
+    };
+
   render(){
     return (
         <div>
@@ -201,13 +217,12 @@ class NewCardForm extends React.Component {
           <div><input type="radio" name="priority" value="High" onChange={this.handlePruorityChange} value={this.state.status}  defaultChecked={true} />High</div>
           <div><input type="radio" name="priority" value="Medium" onChange={this.handlePruorityChange} value={this.state.status} />Medium</div>
           <div><input type="radio" name="priority" value="Low" onChange={this.handlePruorityChange} value={this.state.status} />Low</div>
+           Status of Task:
+          <div><input type="radio" name="status" value="To Do" onChange={this.handlePruorityChange} value={this.state.status}  defaultChecked={true} />To Do</div>
+          <div><input type="radio" name="status" value="In Progress" onChange={this.handlePruorityChange} value={this.state.status} />In Progress</div>
+          <div><input type="radio" name="status" value="Done" onChange={this.handlePruorityChange} value={this.state.status} />Done</div>
         </div>
 
-        <div> Status of Task:
-          <div><input type="radio" name="status" value="Que" onChange={this.handleStatusChange} value={this.state.status} defaultChecked={true}/>Que</div>
-          <div><input type="radio" name="status" value="In Progress" onChange={this.handleStatusChange} value={this.state.status} />In Progress</div>
-          <div><input type="radio" name="status" value="Done" onChange={this.handleStatusChange} value={this.state.status} />Done</div>
-        </div>
         <div>
           <button type="submit">Add Card</button>
         </div>
@@ -260,8 +275,8 @@ class App extends React.Component{
         <h1>Hello Kanban!</h1>
         <NewCardForm addCard={this.addCard}/>
         <QueueColumn cards={this.state.cards} />
-        <ProgressColumn />
-        <DoneColumn />
+        <ProgressColumn cards={this.state.cards} />
+        <DoneColumn cards={this.state.cards}/>
       </div>
     );
   }
