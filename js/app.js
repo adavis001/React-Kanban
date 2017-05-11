@@ -26,35 +26,35 @@ const getCardsFromFakeDB = () => new Promise((resolve, reject) => {
     }
   ];
 
-  setTimeout(() => resolve(cardsFromFakeDB), 250);
+  resolve(cardsFromFakeDB);
 });
 
 //took out the id.  Is it needed?
 const Card = (props) => (
-  <li>
-    <h3>{ props.card.title }</h3>
-    <p>{ props.card.priority }</p>
-    <p>{ props.card.status }</p>
-    <p>{ props.card.createdBy }</p>
-    <p>{ props.card.assignedTo }</p>
-  </li>
+  <div className = "card">
+    <h3>Task: { props.card.title }</h3>
+    <div>Priority Level:  { props.card.priority }</div>
+    <div>Status of Task: { props.card.status }</div>
+    <div>Created By:  { props.card.createdBy }</div>
+    <div>Assigned To:  { props.card.assignedTo }</div>
+  </div>
 );
 
 
 //can't filter by id.  Figure out why later!
-const CardSearchFilter = filter =>
-  ({ title, priority, status, createdBy, assignedTo, id }) =>
-    filter === "" ||
-      title.toLowerCase().indexOf(filter.toLowerCase()) >= 0 ||
-      priority.toLowerCase().indexOf(filter.toLowerCase()) >= 0 ||
-      status.toLowerCase().indexOf(filter.toLowerCase()) >= 0 ||
-      createdBy.toLowerCase().indexOf(filter.toLowerCase()) >= 0 ||
-      assignedTo.toLowerCase().indexOf(filter.toLowerCase()) >= 0;
+// const CardSearchFilter = filter =>
+//   ({ title, priority, status, createdBy, assignedTo, id }) =>
+//     filter === "" ||
+//       title.toLowerCase().indexOf(filter.toLowerCase()) >= 0 ||
+//       priority.toLowerCase().indexOf(filter.toLowerCase()) >= 0 ||
+//       status.toLowerCase().indexOf(filter.toLowerCase()) >= 0 ||
+//       createdBy.toLowerCase().indexOf(filter.toLowerCase()) >= 0 ||
+//       assignedTo.toLowerCase().indexOf(filter.toLowerCase()) >= 0;
 
 const CardList = ({ cards, filter }) => (
   <ul>
     { cards
-      .filter(CardSearchFilter(filter))
+      //.filter(CardSearchFilter(filter))
       .map( card => <Card card={card} /> )
     }
   </ul>
@@ -63,6 +63,54 @@ const CardList = ({ cards, filter }) => (
 const CardFilterInput = ({ setFilter }) => (
   <input type="text" placeholder="search" onChange={setFilter} />
 );
+
+class Cards extends React.Component {
+
+}
+
+class DoneColumn extends React.Component {
+  render(){
+    return (
+        <div>
+          <div className="done">
+            <p>Done</p>
+          </div>
+        </div>
+
+    )
+  }
+}
+
+class ProgressColumn extends React.Component {
+  render(){
+    return (
+        <div>
+          <div className="progress">
+            <p>In Progress</p>
+          </div>
+        </div>
+    )
+  }
+}
+
+class QueueColumn extends React.Component {
+  constructor(props){
+    super(props);
+
+    };
+
+  render(){
+    return (
+        <div>
+          <div className="queue">
+            <p>To Do</p>
+            <CardList cards={this.props.cards}></CardList>
+          </div>
+        </div>
+    )
+  }
+}
+
 
 class NewCardForm extends React.Component {
 
@@ -142,12 +190,6 @@ class NewCardForm extends React.Component {
         </div>
 
         <div>
-          <input type="text" placeholder="priority" onChange={this.handlePriorityChange} value={this.state.priority} />
-
-        </div>
-
-
-        <div>
           <input type="text" placeholder="created by" onChange={this.handleCreatedByChange} value={this.state.createdBy} />
         </div>
 
@@ -156,10 +198,15 @@ class NewCardForm extends React.Component {
         </div>
 
         <div> Priority Level:
+          <div><input type="radio" name="priority" value="High" onChange={this.handlePruorityChange} value={this.state.status}  defaultChecked={true} />High</div>
+          <div><input type="radio" name="priority" value="Medium" onChange={this.handlePruorityChange} value={this.state.status} />Medium</div>
+          <div><input type="radio" name="priority" value="Low" onChange={this.handlePruorityChange} value={this.state.status} />Low</div>
+        </div>
 
-          <div><input type="radio" name="priority" value="High" onChange={this.handleStatusChange} value={this.state.status} />High</div>
-          <div><input type="radio" name="priority" value="Medium" onChange={this.handleStatusChange} value={this.state.status} />Medium</div>
-          <div><input type="radio" name="priority" value="Low" onChange={this.handleStatusChange} value={this.state.status} />Low</div>
+        <div> Status of Task:
+          <div><input type="radio" name="status" value="Que" onChange={this.handleStatusChange} value={this.state.status} defaultChecked={true}/>Que</div>
+          <div><input type="radio" name="status" value="In Progress" onChange={this.handleStatusChange} value={this.state.status} />In Progress</div>
+          <div><input type="radio" name="status" value="Done" onChange={this.handleStatusChange} value={this.state.status} />Done</div>
         </div>
         <div>
           <button type="submit">Add Card</button>
@@ -204,14 +251,17 @@ class App extends React.Component{
       cards : this.state.cards.concat(card)
     });
   }
+       // <CardList cards={this.state.cards} filter={this.state.filter}></CardList>
+        //<CardFilterInput setFilter={this.setFilter} />
 
   render(){
     return (
       <div>
-        <h1>Hello React</h1>
-        <CardFilterInput setFilter={this.setFilter} />
-        <CardList cards={this.state.cards} filter={this.state.filter}></CardList>
+        <h1>Hello Kanban!</h1>
         <NewCardForm addCard={this.addCard}/>
+        <QueueColumn cards={this.state.cards} />
+        <ProgressColumn />
+        <DoneColumn />
       </div>
     );
   }
