@@ -32,32 +32,11 @@ const getCardsFromFakeDB = () => new Promise((resolve, reject) => {
   resolve(cardsFromFakeDB);
 });
 
-//dumb-ass component.  No brain!
-// const Card = (props) => (
-//   <div className = "card">
-//     <h3>Task: { props.card.title }</h3>
-//     <div>Priority Level:  { props.card.priority }</div>
-//     <div>Status of Task: { props.card.status }</div>
-//     <div>Created By:  { props.card.createdBy }</div>
-//     <div>Assigned To:  { props.card.assignedTo }</div>
-//     <div>Task Id:  { props.card.id }</div>
-//   </div>
-// );
-
 
 class Card extends React.Component {
   constructor(props){
     super(props);
 
-    // set the initial state
-    // this.state = {
-    //   title: "",
-    //   priority: "",
-    //   status: "",
-    //   createdBy: "",
-    //   assignedTo: "",
-    //   id: ""
-    // };
   this.handleStatusChange = this.handleStatusChange.bind(this);
   this.handleSubmit = this.handleSubmit.bind(this);
   }
@@ -139,30 +118,30 @@ const DoneSearch = filter =>
       status === 'Done';
 
 const QueueList = ({ cards, filter, updateCard }) => (
-  <ul>
+  <div>
     { cards
       .filter(QueueSearch())
       .map( card => <Card card={card} updateCard={updateCard} /> )
     }
-  </ul>
+  </div>
 );
 
 const ProgressList = ({ cards, filter, updateCard  }) => (
-  <ul>
+  <div>
     { cards
       .filter(ProgressSearch())
       .map( card => <Card card={card} updateCard={updateCard} /> )
     }
-  </ul>
+  </div>
 );
 
 const DoneList = ({ cards, filter, updateCard  }) => (
-  <ul>
+  <div>
     { cards
       .filter(DoneSearch())
       .map( card => <Card card={card} updateCard={updateCard} /> )
     }
-  </ul>
+  </div>
 );
 
 const CardFilterInput = ({ setFilter }) => (
@@ -177,12 +156,11 @@ class DoneColumn extends React.Component {
 
   render(){
     return (
-        <div>
           <div className="done">
             <p>Done</p>
             <DoneList cards={this.props.cards} updateCard={this.props.updateCard}></DoneList>
           </div>
-        </div>
+
 
     )
   }
@@ -196,12 +174,11 @@ class ProgressColumn extends React.Component {
 
   render(){
     return (
-        <div>
           <div className="progress">
             <p>In Progress</p>
             <ProgressList cards={this.props.cards} updateCard={this.props.updateCard}></ProgressList>
           </div>
-        </div>
+
     )
   }
 }
@@ -214,12 +191,11 @@ class QueueColumn extends React.Component {
 
   render(){
     return (
-        <div>
           <div className="queue">
             <p>Queue</p>
             <QueueList cards={this.props.cards} updateCard={this.props.updateCard}></QueueList>
           </div>
-        </div>
+
     )
   }
 }
@@ -296,7 +272,7 @@ class NewCardForm extends React.Component {
 
   render(){
     return (
-      <form onSubmit={this.handleSubmit}>
+      <form id="NewForm" onSubmit={this.handleSubmit}><h3>New Task</h3>
         <div>
           <input type="text" placeholder="title" onChange={this.handleTitleChange} value={this.state.title} />
         </div>
@@ -368,6 +344,9 @@ class App extends React.Component{
   }
 
   updateCard(card){
+    if(card === null){
+      return
+    }
     this.setState({
       cards : this.state.cards.concat(card)
     });
@@ -377,8 +356,7 @@ class App extends React.Component{
 
   render(){
     return (
-      <div>
-        <h1>Hello Kanban!</h1>
+      <div id="board">
         <NewCardForm addCard={this.addCard}/>
         <QueueColumn cards={this.state.cards} updateCard={this.updateCard} />
         <ProgressColumn cards={this.state.cards} updateCard={this.updateCard} />
