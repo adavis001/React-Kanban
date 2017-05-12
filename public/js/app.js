@@ -1,5 +1,6 @@
 const reactContainer = document.getElementById("root");
 
+
 const getCardsFromFakeDB = () => new Promise((resolve, reject) => {
   const cardsFromFakeDB = [
     {
@@ -9,14 +10,16 @@ const getCardsFromFakeDB = () => new Promise((resolve, reject) => {
       status: 'Done',
       createdBy: 'Alexander Davis',
       assignedTo: 'Ernest Tsang'
-    },    {
+    },
+    {
       id: 2,
       title : 'Eat Pizza',
       priority : 'High',
       status: 'In Progress',
       createdBy: 'Alexander Davis',
       assignedTo: 'Ernest Tsang'
-    },    {
+    },
+    {
       id: 3,
       title : 'Exercise',
       priority : 'Low',
@@ -29,16 +32,96 @@ const getCardsFromFakeDB = () => new Promise((resolve, reject) => {
   resolve(cardsFromFakeDB);
 });
 
-//took out the id.  Is it needed?
-const Card = (props) => (
+//dumb-ass component.  No brain!
+// const Card = (props) => (
+//   <div className = "card">
+//     <h3>Task: { props.card.title }</h3>
+//     <div>Priority Level:  { props.card.priority }</div>
+//     <div>Status of Task: { props.card.status }</div>
+//     <div>Created By:  { props.card.createdBy }</div>
+//     <div>Assigned To:  { props.card.assignedTo }</div>
+//     <div>Task Id:  { props.card.id }</div>
+//   </div>
+// );
+
+
+class Card extends React.Component {
+  constructor(props){
+    super(props);
+
+    // set the initial state
+    // this.state = {
+    //   title: "",
+    //   priority: "",
+    //   status: "",
+    //   createdBy: "",
+    //   assignedTo: "",
+    //   id: ""
+    // };
+  this.handleStatusChange = this.handleStatusChange.bind(this);
+  this.handleSubmit = this.handleSubmit.bind(this);
+  }
+
+   handleClick(card) {
+    if(card.status === "In Progress"){
+      card.status = "Done";
+    }
+    else if(card.status === "Queue"){
+      card.status = "In Progress";
+    }
+    else if(card.status === "Done"){
+      card.status = "Queue";
+    }
+    console.log("card",card);
+    this.setState({});
+  }
+
+  updateCard(card){
+    console.log(this.props);
+    console.log(card);
+    // update my parent's cards state
+    this.props.updateCard(card);
+
+    const title = this.props.card.title;
+    const priority = "";
+    const status = "";
+    const createdBy = "";
+    const assignedTo = "";
+    this.setState({
+      title,
+      priority,
+      status,
+      createdBy,
+      assignedTo,
+    });
+  }
+
+  handleSubmit(event) {
+    event.preventDefault();
+    this.updateCard(this.state);
+  }
+
+  handleStatusChange(event) {
+    this.setState({ status : event.target.value });
+  }
+  render(){
+    return (
   <div className = "card">
-    <h3>Task: { props.card.title }</h3>
-    <div>Priority Level:  { props.card.priority }</div>
-    <div>Status of Task: { props.card.status }</div>
-    <div>Created By:  { props.card.createdBy }</div>
-    <div>Assigned To:  { props.card.assignedTo }</div>
+    <h3>Task: { this.props.card.title }</h3>
+    <div>Priority Level:  { this.props.card.priority }</div>
+    <div onClick={() =>this.handleClick(this.props.card)} >Status of Task: { this.props.card.status }</div>
+    <div>Created By:  { this.props.card.createdBy }</div>
+    <div>Assigned To:  { this.props.card.assignedTo }</div>
+    <div>Task Id:  { this.props.card.id }</div>
+    <form onSubmit={this.handleSubmit}>
+        <div>
+          <button type="submit">Update Card</button>
+        </div>
+    </form>
   </div>
 );
+  }
+}
 
 
 const QueueSearch = filter =>
@@ -53,29 +136,29 @@ const DoneSearch = filter =>
   ({ status }) =>
       status === 'Done';
 
-const QueueList = ({ cards, filter }) => (
+const QueueList = ({ cards, filter, updateCard }) => (
   <ul>
     { cards
       .filter(QueueSearch())
-      .map( card => <Card card={card} /> )
+      .map( card => <Card card={card} updateCard={updateCard} /> )
     }
   </ul>
 );
 
-const ProgressList = ({ cards, filter }) => (
+const ProgressList = ({ cards, filter, updateCard  }) => (
   <ul>
     { cards
       .filter(ProgressSearch())
-      .map( card => <Card card={card} /> )
+      .map( card => <Card card={card} updateCard={updateCard} /> )
     }
   </ul>
 );
 
-const DoneList = ({ cards, filter }) => (
+const DoneList = ({ cards, filter, updateCard  }) => (
   <ul>
     { cards
       .filter(DoneSearch())
-      .map( card => <Card card={card} /> )
+      .map( card => <Card card={card} updateCard={updateCard} /> )
     }
   </ul>
 );
@@ -84,17 +167,18 @@ const CardFilterInput = ({ setFilter }) => (
   <input type="text" placeholder="search" onChange={setFilter} />
 );
 
-class Cards extends React.Component {
-
-}
 
 class DoneColumn extends React.Component {
+  //   constructor(props){
+  //   super(props);
+  // };
+
   render(){
     return (
         <div>
           <div className="done">
             <p>Done</p>
-            <DoneList cards={this.props.cards}></DoneList>
+            <DoneList cards={this.props.cards} updateCard={this.props.updateCard}></DoneList>
           </div>
         </div>
 
@@ -104,12 +188,16 @@ class DoneColumn extends React.Component {
 
 //<ProgressList cards={this.props.cards}></ProgressList>
 class ProgressColumn extends React.Component {
+    // constructor(props){
+    // super(props);
+    // };
+
   render(){
     return (
         <div>
           <div className="progress">
             <p>In Progress</p>
-            <ProgressList cards={this.props.cards}></ProgressList>
+            <ProgressList cards={this.props.cards} updateCard={this.props.updateCard}></ProgressList>
           </div>
         </div>
     )
@@ -117,23 +205,22 @@ class ProgressColumn extends React.Component {
 }
 
 class QueueColumn extends React.Component {
-  constructor(props){
-    super(props);
+  // constructor(props){
+  //   super(props);
 
-    };
+  //   };
 
   render(){
     return (
         <div>
           <div className="queue">
-            <p>To Do</p>
-            <QueueList cards={this.props.cards}></QueueList>
+            <p>Queue</p>
+            <QueueList cards={this.props.cards} updateCard={this.props.updateCard}></QueueList>
           </div>
         </div>
     )
   }
 }
-
 
 class NewCardForm extends React.Component {
 
@@ -253,6 +340,7 @@ class App extends React.Component{
 
     this.setFilter = this.setFilter.bind(this);
     this.addCard = this.addCard.bind(this);
+    this.updateCard = this.updateCard.bind(this);
 
   }
 
@@ -276,6 +364,12 @@ class App extends React.Component{
       cards : this.state.cards.concat(card)
     });
   }
+
+  updateCard(card){
+    this.setState({
+      cards : this.state.cards.concat(card)
+    });
+  }
        // <QueueList cards={this.state.cards} filter={this.state.filter}></QueueList>
         //<CardFilterInput setFilter={this.setFilter} />
 
@@ -284,9 +378,9 @@ class App extends React.Component{
       <div>
         <h1>Hello Kanban!</h1>
         <NewCardForm addCard={this.addCard}/>
-        <QueueColumn cards={this.state.cards} />
-        <ProgressColumn cards={this.state.cards} />
-        <DoneColumn cards={this.state.cards} />
+        <QueueColumn cards={this.state.cards} updateCard={this.updateCard} />
+        <ProgressColumn cards={this.state.cards} updateCard={this.updateCard} />
+        <DoneColumn cards={this.state.cards} updateCard={this.updateCard} />
       </div>
     );
   }
