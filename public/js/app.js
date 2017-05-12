@@ -62,16 +62,18 @@ class Card extends React.Component {
   this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-   handleClick(card) {
-    if(card.status === "In Progress"){
-      card.status = "Done";
-    }
-    else if(card.status === "Queue"){
-      card.status = "In Progress";
-    }
-    else if(card.status === "Done"){
-      card.status = "Queue";
-    }
+handleClick(card) {
+  switch (card.status) {
+    case "Queue":
+        card.status = "In Progress";
+        break;
+    case "In Progress":
+        card.status = "Done";
+        break;
+    case "Done":
+        card.status = "Queue";
+        break;
+  }
     console.log("card",card);
     this.setState({});
   }
