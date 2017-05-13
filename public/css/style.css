@@ -15,14 +15,11 @@ body {
 
 .queue {
   align-content: center;
-  width: 32vw;
-  background-color: silver; }
+  width: 32vw; }
 
 .progress {
   width: 32vw;
-  display: inline;
-  background-color: green; }
+  display: inline; }
 
 .done {
-  width: 32vw;
-  background-color: pink; }
+  width: 32vw; }

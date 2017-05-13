@@ -209,7 +209,7 @@ class NewCardForm extends React.Component {
     this.state = {
       title: "",
       priority: "",
-      status: "",
+      status: "Que",
       createdBy: "",
       assignedTo: "",
       id: ""
@@ -248,6 +248,8 @@ class NewCardForm extends React.Component {
   handleSubmit(event) {
     event.preventDefault();
     this.addCard(this.state);
+    NewForm.reset();
+    console.log(this);
   }
 
   handleTitleChange(event) {
@@ -286,13 +288,13 @@ class NewCardForm extends React.Component {
         </div>
 
         <div> Priority Level: <br />
-         <input type="radio" name="priority" value="High" onChange={this.handlePriorityChange}  />High <br />
+         <input type="radio" name="priority" value="High" onChange={this.handlePriorityChange} />High <br />
          <input type="radio" name="priority" value="Medium" onChange={this.handlePriorityChange}  />Medium <br />
          <input type="radio" name="priority" value="Low" onChange={this.handlePriorityChange}  />Low
         </div>
 
         <div> Status of Task: <br />
-        <input type="radio" name="status" value="Queue" onChange={this.handleStatusChange}  />In Queue <br />
+        <input type="radio" name="status" value="Queue" onChange={this.handleStatusChange} required  />In Queue <br />
          <input type="radio" name="status" value="In Progress" onChange={this.handleStatusChange}  />In Progress <br />
          <input type="radio" name="status" value="Done" onChange={this.handleStatusChange}  />Done
         </div>
